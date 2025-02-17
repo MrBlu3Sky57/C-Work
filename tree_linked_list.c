@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "linked_list.h"
-
-// Update to use void pointers
+#include "tree_linked_list.h"
+#include "tree.h"
 
 
 // Single element initialization
-List* create_list(int n) 
+T_List* create_list(Tree* t) 
 {
 
-    List* new = malloc(sizeof(List));
-    L_node* first = malloc(sizeof(L_node));
+    T_List* new = malloc(sizeof(T_List));
+    T_node* first = malloc(sizeof(T_node));
 
     first->next = NULL;
-    first->value = n;
+    first->value = t;
 
     new->head = first;
 
@@ -21,12 +20,12 @@ List* create_list(int n)
 }
 
 // Add an element to tail
-void append(List* l, int n) 
+void append(T_List* l, Tree* t) 
 {
-    L_node* cur = l->head;
+    T_node* cur = l->head;
 
-    L_node* new = malloc(sizeof(L_node));
-    new->value = n;
+    T_node* new = malloc(sizeof(T_node));
+    new->value = t;
     new->next = NULL;
 
     while (cur != NULL) 
@@ -41,61 +40,61 @@ void append(List* l, int n)
     }
 
     if (cur->next == NULL) 
-    {
+        {
             cur->next = new;
-    }
+        }
 }
 
 // Add an element to head
-void prepend(List* l, int n)
+void prepend(T_List* l, Tree* t)
 {
-    L_node* new = malloc(sizeof(L_node));
+    T_node* new = malloc(sizeof(T_node));
 
     new->next = l->head;
-    new->value = n;
+    new->value = t;
 
     l->head = new;
 }
 
 // Remove and return an element from head
 // (Assuming len > 0)
-int pre_pop(List* l) 
+int pre_pop(T_List* l) 
 {
-    int n = l->head->value;
-    L_node* temp = l->head->next;
+    Tree* t = l->head->value;
+    T_node* temp = l->head->next;
     free(l->head);
     l->head = temp;
 
-    return n;
+    return t;
 }
 
 // Remove and return an element from the tail
 // (Assuming len > 0)
-int pop(List* l) 
+int pop(T_List* l) 
 {
-    L_node* cur = l->head;
-    int n = 0;
+    T_node* cur = l->head;
+    Tree* t = NULL;
     
     while(cur != NULL) 
     {
         if (cur->next->next == NULL)
         {
-            n = cur->next->value;
+            t = cur->next->value;
             free(cur->next);
             cur->next = NULL;
             break;
         }
         cur = cur->next;
     }
-    return n;
+    return t;
 }
 
 // Remove and return an element from an arbitrary index
 // (Assuming len > 0, index is positive and less the len and l is zero indexed)
-int pop_index(List*l, int index) 
+int pop_index(T_List*l, int index) 
 {
-    L_node* cur = l->head;
-    int n = 0;
+    T_node* cur = l->head;
+    Tree* t = NULL;
 
     if (index == 0) 
     {
@@ -108,8 +107,8 @@ int pop_index(List*l, int index)
     {
         if (counter == index) 
         {
-            n = cur->next->value;
-            L_node* temp = cur->next->next;
+            t = cur->next->value;
+            T_node* temp = cur->next->next;
             free(cur->next);
             cur->next = temp;
             break;
@@ -117,16 +116,5 @@ int pop_index(List*l, int index)
         cur = cur->next;
         counter++;
     }
-    return n;
-}
-
-// Print out list
-void printl(List* l)
-{
-    L_node* cur = l->head;
-    
-    while (cur != NULL) {
-        printf("%d\n", cur->value);
-        cur = cur->next;
-    }
+    return t;
 }
